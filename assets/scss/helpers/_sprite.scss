@@ -1,0 +1,103 @@
+/*
+SCSS variables are information about icon's compiled state, stored under its original file name
+
+.icon-home {
+  width: $icon-home-width;
+}
+
+The large array-like variables contain all information about a single icon
+$icon-home: x y offset_x offset_y width height total_width total_height image_path;
+
+At the bottom of this section, we provide information about the spritesheet itself
+$spritesheet: width height image $spritesheet-sprites;
+*/
+$b92-icon-name: 'b92-icon';
+$b92-icon-x: 0px;
+$b92-icon-y: 128px;
+$b92-icon-offset-x: 0px;
+$b92-icon-offset-y: -128px;
+$b92-icon-width: 96px;
+$b92-icon-height: 96px;
+$b92-icon-total-width: 256px;
+$b92-icon-total-height: 224px;
+$b92-icon-image: 'sprite.png';
+$b92-icon: 0px 128px 0px -128px 96px 96px 256px 224px 'sprite.png' 'b92-icon';
+$clock-analog-icon-name: 'clock-analog-icon';
+$clock-analog-icon-x: 0px;
+$clock-analog-icon-y: 0px;
+$clock-analog-icon-offset-x: 0px;
+$clock-analog-icon-offset-y: 0px;
+$clock-analog-icon-width: 128px;
+$clock-analog-icon-height: 128px;
+$clock-analog-icon-total-width: 256px;
+$clock-analog-icon-total-height: 224px;
+$clock-analog-icon-image: 'sprite.png';
+$clock-analog-icon: 0px 0px 0px 0px 128px 128px 256px 224px 'sprite.png' 'clock-analog-icon';
+$google-icon-name: 'google-icon';
+$google-icon-x: 128px;
+$google-icon-y: 0px;
+$google-icon-offset-x: -128px;
+$google-icon-offset-y: 0px;
+$google-icon-width: 128px;
+$google-icon-height: 128px;
+$google-icon-total-width: 256px;
+$google-icon-total-height: 224px;
+$google-icon-image: 'sprite.png';
+$google-icon: 128px 0px -128px 0px 128px 128px 256px 224px 'sprite.png' 'google-icon';
+$spritesheet-width: 256px;
+$spritesheet-height: 224px;
+$spritesheet-image: 'sprite.png';
+$spritesheet-sprites: $b92-icon $clock-analog-icon $google-icon;
+$spritesheet: 256px 224px 'sprite.png' $spritesheet-sprites;
+
+/*
+The provided mixins are intended to be used with the array-like variables
+
+.icon-home {
+  @include sprite-width($icon-home);
+}
+
+.icon-email {
+  @include sprite($icon-email);
+}
+*/
+@mixin sprite-width($sprite) {
+  width: nth($sprite, 5);
+}
+
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 6);
+}
+
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3);
+  $sprite-offset-y: nth($sprite, 4);
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin sprite-image($sprite) {
+  $sprite-image: nth($sprite, 9);
+  background-image: url(#{$sprite-image});
+}
+
+@mixin sprite($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+}
+
+/*
+The `sprites` mixin generates identical output to the CSS template
+  but can be overridden inside of SCSS
+
+@include sprites($spritesheet-sprites);
+*/
+@mixin sprites($sprites) {
+  @each $sprite in $sprites {
+    $sprite-name: nth($sprite, 10);
+    .#{$sprite-name} {
+      @include sprite($sprite);
+    }
+  }
+}
